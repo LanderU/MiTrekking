@@ -39,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 */
+/*
+        Coordenada c = new Coordenada();
+        c.setLatitud(55);
+        c.setLongitud(44);
+        c.setTimestap("systedate");
+*/
     }
 
     @Override

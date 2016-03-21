@@ -11,6 +11,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GestorBD {
 
@@ -122,6 +125,33 @@ public class GestorBD {
 
 
     } // finalizar guardar en la BD
+
+
+    // Método para recuperar las coordenadas en forma de ArrayList.
+
+    public List<Coordenada> obtenerCoordenadas(){
+
+        // Guardamos las coordenadas en un ArrayList.
+
+        List<Coordenada> coordenada = new ArrayList<>();
+
+        if(bd.isOpen()){
+
+            // Cargamos los datos para la consulta
+
+            String tabla = "punto";
+            String [] columnas = new String[]{"latitud","longitud","timestap"};
+            String where = null; // Aquí vamos a poner el refinamiento de clave primaria clave ajena.
+
+
+
+
+        }// end if
+
+        return coordenada;
+    }// end obtenerCoordenadas
+
+
 
 
 

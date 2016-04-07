@@ -12,7 +12,14 @@ public class Coordenada {
     // Atributos
     private float longitud = 0;
     private  float latitud = 0;
-    private String timestap = "";
+    private String timestamp = "";
+
+    public Coordenada(float longitud, float latitud, String timestamp) {
+        this.longitud = longitud;
+        this.latitud = latitud;
+        this.timestamp = timestamp;
+    }//
+
 
     // Getters
     public float getLongitud() {
@@ -24,7 +31,7 @@ public class Coordenada {
     } // end getLatitud
 
     public String getTimestap() {
-        return timestap;
+        return timestamp;
     } // end getTimestap
 
     // Setters
@@ -36,8 +43,8 @@ public class Coordenada {
         this.latitud = latitud;
     }//end setLatitud
 
-    public void setTimestap(String timestap) {
-        this.timestap = timestap;
+    public void setTimestap(String timestamp) {
+        this.timestamp = timestamp;
     }//end setTimestap
 
 } // class

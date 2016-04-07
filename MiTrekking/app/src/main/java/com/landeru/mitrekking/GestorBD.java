@@ -7,6 +7,7 @@ package com.landeru.mitrekking;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -22,12 +23,11 @@ public class GestorBD {
     private SQLiteDatabase bd = null;
     private BDHelper helper = null;
 
-    // Creamos la base de datos
 
     private class BDHelper extends SQLiteOpenHelper{
 
-        private String tablaRuta = "CREATE TABLE ruta (idRuta INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,fecha text);";
-        private String tablaPunto = "CREATE TABLE  punto (idPunto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, latitud REAL, longitud REAL,timestap text,idRuta INTEGER, FOREIGN KEY (idRuta) REFERENCES ruta (idRuta));";
+        private String tablaRuta = "CREATE TABLE ruta (idRuta INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp text);";
+        private String tablaPunto = "CREATE TABLE punto (idPunto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, latitud REAL, longitud REAL,timestap text,idRuta INTEGER, FOREIGN KEY (idRuta) REFERENCES ruta (idRuta));";
 
         //Constructor
         public BDHelper(Context context, String name, CursorFactory factory, int version) {
@@ -105,6 +105,17 @@ public class GestorBD {
 
     } // end cerrarBD
 
+    // Guardar ruta
+
+    public void guardarRuta(String tiempo){
+
+        if(bd.isOpen() && tiempo.length() != 0 ){
+
+
+        } // end if
+
+    } //end guardar Ruta
+
     // Guardar coordenadas
 
     public void guardarCoordenadas(Coordenada coordenada){
@@ -115,9 +126,9 @@ public class GestorBD {
 
             dato.put("latitud",coordenada.getLatitud());
             dato.put("longitud",coordenada.getLongitud());
-            dato.put("timestap",coordenada.getTimestap());
+            dato.put("timestamp",coordenada.getTimestap());
 
-            bd.insert("punto",null,dato);
+            bd.insert("punto", null, dato);
 
 
         }// end if
@@ -127,9 +138,10 @@ public class GestorBD {
     } // finalizar guardar en la BD
 
 
+
     // Método para recuperar las coordenadas en forma de ArrayList.
 
-    public List<Coordenada> obtenerCoordenadas(){
+    public List<Coordenada> obtenerCoordenadas(String coordenadaSeleccionada){
 
         // Guardamos las coordenadas en un ArrayList.
 
@@ -140,15 +152,36 @@ public class GestorBD {
             // Cargamos los datos para la consulta
 
             String tabla = "punto";
-            String [] columnas = new String[]{"latitud","longitud","timestap"};
-            String where = null; // Aquí vamos a poner el refinamiento de clave primaria clave ajena.
+            String [] columnas = new String[]{"idPunto, latitud","longitud","timestamp, idRuta"};
+            String where = "idRuta = ?"; // Aquí vamos a poner el refinamiento de clave primaria clave ajena.
+            String [] argumentos = new String [] {coordenadaSeleccionada};
+            String groupby = null;
+            String having = null;
+            String orderby = "idPunto desc";
+            String limite = null;
+
+            // Creamos el cursor
+
+            Cursor cursorCoordenadas = bd.query(tabla,columnas,where,argumentos,having,orderby,limite);
+
+            // Recorremos el cursor
+
+            // Hacemos los cast
 
 
+            if(cursorCoordenadas.moveToFirst()){
 
+                do {
+                    Coordenada c = new Coordenada(Float.parseFloat(cursorCoordenadas.getString(1)),Float.parseFloat(cursorCoordenadas.getString(2)),cursorCoordenadas.getString(3));
+                }while (cursorCoordenadas.moveToNext());
+
+
+            }// end if
 
         }// end if
 
         return coordenada;
+
     }// end obtenerCoordenadas
 
 

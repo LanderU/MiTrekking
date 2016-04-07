@@ -8,18 +8,28 @@ import android.content.Intent;
  */
 public class Servicio extends IntentService {
 
+    GestorBD baseDatos = null;
 
+    // manager
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
      * @param name Used to name the worker thread, important only for debugging.
      */
+
+    // Constructor
     public Servicio(String name) {
         super(name);
+
+        // Abrimos la BD
+
+        baseDatos = new GestorBD(this);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+    //listener
 
-    }
+
+    }//
 }

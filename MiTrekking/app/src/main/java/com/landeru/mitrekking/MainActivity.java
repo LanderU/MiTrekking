@@ -1,16 +1,26 @@
 package com.landeru.mitrekking;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
+
+    private TextView texto;
+    private Button bt1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +29,30 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        bt1 = (Button) findViewById(R.id.button);
+        // Acción de pulsar el botón 1
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Iniciamos el servicio en otro hilo
+                startService(new Intent(MainActivity.this, Servicio.class));
+
+                // Deshabilitamos el botón
+                bt1.setEnabled(false);
+
+
+
+                //Mostramos un mensaje
+                Context context = getApplicationContext();
+                CharSequence mensaje = "Capturando su ruta pulse \"DETENER\" para finalizar";
+                int duracion = Toast.LENGTH_LONG;
+
+                Toast toast = Toast.makeText(context,mensaje,duracion);
+                toast.show();
+            }
+        });
+
         // Acción pulsar botón 2
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,27 +60,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, MapsActivity.class));
             }
         });
-/*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-*/
-/*
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-*/
-/*
-        Coordenada c = new Coordenada();
-        c.setLatitud(55);
-        c.setLongitud(44);
-        c.setTimestap("systedate");
-*/
+
+        texto = (TextView) findViewById(R.id.textView);
+        String strInputMsg = texto.getText().toString();
+        Intent msgIntent = new Intent(this, Servicio.class);
+        msgIntent.putExtra(Servicio.PARAM_IN_MSG,strInputMsg);
+        startService(msgIntent);
+
     }
 
     @Override

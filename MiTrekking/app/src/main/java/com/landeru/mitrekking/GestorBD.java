@@ -12,7 +12,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 
@@ -111,10 +115,31 @@ public class GestorBD {
 
         if(bd.isOpen() && tiempo.length() != 0 ){
 
+            ContentValues nuevaRuta = new ContentValues();
+
+            // Obtenemos el día y la hora
+
+            Calendar cal = new GregorianCalendar();
+
+            Date date = cal.getTime();
+
+            SimpleDateFormat fechaHora = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+            String timestamp = fechaHora.format(date);
+
+            // Lo guardamos
+
+            nuevaRuta.put("timestamp", timestamp);
+
+            // Hacemos el insert en la BD
+
+            bd.insert("ruta",null,nuevaRuta);
+
 
         } // end if
 
     } //end guardar Ruta
+
 
     // Guardar coordenadas
 
@@ -162,12 +187,9 @@ public class GestorBD {
 
             // Creamos el cursor
 
-            Cursor cursorCoordenadas = bd.query(tabla,columnas,where,argumentos,having,orderby,limite);
+            Cursor cursorCoordenadas = bd.query(tabla,columnas,where,argumentos,groupby,having,orderby,limite);
 
             // Recorremos el cursor
-
-            // Hacemos los cast
-
 
             if(cursorCoordenadas.moveToFirst()){
 

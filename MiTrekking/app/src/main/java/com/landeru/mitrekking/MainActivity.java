@@ -61,11 +61,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+/*  Método para lanzar el servicio en segundo plano
+
         texto = (TextView) findViewById(R.id.textView);
         String strInputMsg = texto.getText().toString();
         Intent msgIntent = new Intent(this, Servicio.class);
         msgIntent.putExtra(Servicio.PARAM_IN_MSG,strInputMsg);
         startService(msgIntent);
+*/
 
     }
 

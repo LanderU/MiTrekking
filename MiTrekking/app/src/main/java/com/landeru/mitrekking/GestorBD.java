@@ -133,12 +133,27 @@ public class GestorBD {
 
             // Hacemos el insert en la BD
 
-            bd.insert("ruta",null,nuevaRuta);
+            bd.insert("ruta", null, nuevaRuta);
 
 
         } // end if
 
     } //end guardar Ruta
+
+    // Devolver la ruta
+
+    public int obtenerRuta(){
+      int idRuta = 0;
+      if(bd.isReadOnly()){
+            final String devolverRuta = "SELECT last_insert_rowid();";
+            Cursor cursorRuta = bd.rawQuery(devolverRuta, null);
+            cursorRuta.moveToFirst();
+            idRuta = cursorRuta.getInt(0);
+            cursorRuta.close();
+      }//   end if
+        return idRuta;
+
+    }// end obtener ruta
 
 
     // Guardar coordenadas

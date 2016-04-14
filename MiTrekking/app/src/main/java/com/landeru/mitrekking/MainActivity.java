@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -19,7 +18,6 @@ import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView texto;
     private Button bt1;
 
     @Override
@@ -38,18 +36,20 @@ public class MainActivity extends AppCompatActivity {
                 // Iniciamos el servicio en otro hilo
                 startService(new Intent(MainActivity.this, Servicio.class));
 
+
                 // Deshabilitamos el botón
                 bt1.setEnabled(false);
 
 
 
                 //Mostramos un mensaje
+                /*
                 Context context = getApplicationContext();
                 CharSequence mensaje = "Capturando su ruta pulse \"DETENER\" para finalizar";
                 int duracion = Toast.LENGTH_LONG;
 
                 Toast toast = Toast.makeText(context,mensaje,duracion);
-                toast.show();
+                toast.show()*/
             }
         });
 

@@ -194,7 +194,7 @@ public class GestorBD {
             if(cursorCoordenadas.moveToFirst()){
 
                 do {
-                    Coordenada c = new Coordenada(Float.parseFloat(cursorCoordenadas.getString(1)),Float.parseFloat(cursorCoordenadas.getString(2)),cursorCoordenadas.getString(3));
+                    Coordenada c = new Coordenada(Double.parseDouble(cursorCoordenadas.getString(1)),Double.parseDouble(cursorCoordenadas.getString(2)),cursorCoordenadas.getString(3));
                 }while (cursorCoordenadas.moveToNext());
 
 

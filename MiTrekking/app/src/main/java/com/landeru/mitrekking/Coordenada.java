@@ -10,11 +10,11 @@ public class Coordenada {
 
 
     // Atributos
-    private float longitud = 0;
-    private  float latitud = 0;
+    private double longitud = 0;
+    private  double latitud = 0;
     private String timestamp = "";
 
-    public Coordenada(float longitud, float latitud, String timestamp) {
+    public Coordenada(double longitud, double latitud, String timestamp) {
         this.longitud = longitud;
         this.latitud = latitud;
         this.timestamp = timestamp;
@@ -22,11 +22,11 @@ public class Coordenada {
 
 
     // Getters
-    public float getLongitud() {
+    public double getLongitud() {
         return longitud;
     } // end getLongitud
 
-    public float getLatitud() {
+    public double getLatitud() {
         return latitud;
     } // end getLatitud
 
@@ -35,11 +35,11 @@ public class Coordenada {
     } // end getTimestap
 
     // Setters
-    public void setLongitud(float longitud) {
+    public void setLongitud(double longitud) {
         this.longitud = longitud;
     }// end setLongitud
 
-    public void setLatitud(float latitud) {
+    public void setLatitud(double latitud) {
         this.latitud = latitud;
     }//end setLatitud
 

@@ -43,13 +43,12 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //Mostramos un mensaje
-                /*
                 Context context = getApplicationContext();
                 CharSequence mensaje = "Capturando su ruta pulse \"DETENER\" para finalizar";
                 int duracion = Toast.LENGTH_LONG;
 
                 Toast toast = Toast.makeText(context,mensaje,duracion);
-                toast.show()*/
+                toast.show();
             }
         });
 

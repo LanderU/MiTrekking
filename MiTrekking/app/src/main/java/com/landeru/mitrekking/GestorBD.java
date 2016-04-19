@@ -111,13 +111,11 @@ public class GestorBD {
 
     // Guardar ruta
 
-    public void guardarRuta(String tiempo){
+    public void guardarRuta(){
 
-        if(bd.isOpen() && tiempo.length() != 0 ){
+        if(bd.isOpen()){
 
             ContentValues nuevaRuta = new ContentValues();
-
-            // Obtenemos el día y la hora
 
             Calendar cal = new GregorianCalendar();
 
@@ -125,11 +123,9 @@ public class GestorBD {
 
             SimpleDateFormat fechaHora = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-            String timestamp = fechaHora.format(date);
+            String tiempo = fechaHora.format(date);
 
-            // Lo guardamos
-
-            nuevaRuta.put("timestamp", timestamp);
+            nuevaRuta.put("timestamp", tiempo);
 
             // Hacemos el insert en la BD
 
@@ -140,9 +136,10 @@ public class GestorBD {
 
     } //end guardar Ruta
 
-    // Devolver la ruta
 
-    public int obtenerRuta(){
+    // Devolver la ruta última
+
+    public int mostrarIdRuta(){
       int idRuta = 0;
       if(bd.isReadOnly()){
             final String devolverRuta = "SELECT last_insert_rowid();";
@@ -154,6 +151,40 @@ public class GestorBD {
         return idRuta;
 
     }// end obtener ruta
+
+    // Método para devolver los datos de las rutas
+
+    public List<Ruta> obtenerRutas(){
+
+        List<Ruta> rt = new ArrayList<>();
+
+        if(bd.isOpen()){
+
+            String tabla = "ruta";
+            String [] columnas = new String [] {"id_ruta","timestamp"};
+            String where = null;
+            String [] argumentos = null;
+            String groupby = null;
+            String having = null;
+            String orderby = null;
+            String limit = null;
+
+            Cursor cursorRuta = bd.query(tabla,columnas,where,argumentos,groupby,having,orderby,limit);
+
+            if (cursorRuta.moveToFirst()){
+                do {
+                    Ruta r = new Ruta (Integer.parseInt(cursorRuta.getString(0)),cursorRuta.getString(1));
+
+                } while(cursorRuta.moveToNext());
+
+            }// end ifi
+
+
+        }// end if
+
+
+        return rt;
+    }// end obtenerRutas
 
 
     // Guardar coordenadas
@@ -167,6 +198,7 @@ public class GestorBD {
             dato.put("latitud",coordenada.getLatitud());
             dato.put("longitud",coordenada.getLongitud());
             dato.put("timestamp",coordenada.getTimestap());
+            dato.put("id_ruta", coordenada.getId_ruta());
 
             bd.insert("punto", null, dato);
 
@@ -220,6 +252,7 @@ public class GestorBD {
         return coordenada;
 
     }// end obtenerCoordenadas
+
 
 
 

@@ -13,6 +13,8 @@ public class Coordenada {
     private double longitud = 0;
     private  double latitud = 0;
     private String timestamp = "";
+    private int id_ruta = 0;
+
 
     public Coordenada(double longitud, double latitud, String timestamp) {
         this.longitud = longitud;
@@ -34,6 +36,8 @@ public class Coordenada {
         return timestamp;
     } // end getTimestap
 
+    public int getId_ruta() {return id_ruta;} // end getid_ruta
+
     // Setters
     public void setLongitud(double longitud) {
         this.longitud = longitud;
@@ -43,8 +47,10 @@ public class Coordenada {
         this.latitud = latitud;
     }//end setLatitud
 
-    public void setTimestap(String timestamp) {
-        this.timestamp = timestamp;
-    }//end setTimestap
+    public void setTimestap(String timestamp) {this.timestamp = timestamp;}//end setTimestap
+
+    public void setId_ruta(int id_ruta) {this.id_ruta = id_ruta;}// end setId_ruta
+
+
 
 } // class

@@ -14,6 +14,11 @@ import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 public class Servicio extends Service {
 
     // Objeto para guardar las coordenadas
@@ -34,12 +39,24 @@ public class Servicio extends Service {
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
+                //constructor
                 corde = new Coordenada(0.0,0.0,"nada");
-            // Llamada al método para guardar en la BD las coordenadas.
+           // seteamos la latitud y la longitud
                 corde.setLatitud(location.getLatitude());
                 corde.setLatitud(location.getLongitude());
+            // fecha y hora
+                Calendar cal = new GregorianCalendar();
+
+                Date date = cal.getTime();
+
+                SimpleDateFormat fechaHora = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+                corde.setTimestap(fechaHora.format(date));
+
                 // Abrimos la BD
                 baseDatos.abrirBD();
+                // Llamamos al método que nos trae el último id_ruta insertado
+                corde.setId_ruta(baseDatos.obtenerRuta());
                 // Guardamos el dato
                 baseDatos.guardarCoordenadas(corde);
 

@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 public class MainActivity extends AppCompatActivity {
 
     private Button bt1;
+    private GestorBD bd = new GestorBD(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                // Abrimos la BD
+
+                bd.abrirBD();
+
+                // Guardamos la ruta
+
+                bd.guardarRuta();
+
+                // Cerramos la BD
+
+                bd.cerrarBD();
+
                 // Iniciamos el servicio en otro hilo
                 startService(new Intent(MainActivity.this, Servicio.class));
 
@@ -41,33 +54,23 @@ public class MainActivity extends AppCompatActivity {
                 bt1.setEnabled(false);
 
 
-
                 //Mostramos un mensaje
                 Context context = getApplicationContext();
                 CharSequence mensaje = "Capturando su ruta pulse \"DETENER\" para finalizar";
                 int duracion = Toast.LENGTH_LONG;
 
-                Toast toast = Toast.makeText(context,mensaje,duracion);
+                Toast toast = Toast.makeText(context, mensaje, duracion);
                 toast.show();
             }
         });
 
-        // Acción pulsar botón 2
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                stopService(new Intent(MainActivity.this,Servicio.class));
+                startActivity(new Intent(MainActivity.this, SelectorRutas.class));
             }
         });
-
-/*  Método para lanzar el servicio en segundo plano
-
-        texto = (TextView) findViewById(R.id.textView);
-        String strInputMsg = texto.getText().toString();
-        Intent msgIntent = new Intent(this, Servicio.class);
-        msgIntent.putExtra(Servicio.PARAM_IN_MSG,strInputMsg);
-        startService(msgIntent);
-*/
 
     }
 

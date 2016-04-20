@@ -31,7 +31,7 @@ public class GestorBD {
     private class BDHelper extends SQLiteOpenHelper{
 
         private String tablaRuta = "CREATE TABLE ruta (idRuta INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp text);";
-        private String tablaPunto = "CREATE TABLE punto (idPunto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, latitud REAL, longitud REAL,timestap text,idRuta INTEGER, FOREIGN KEY (idRuta) REFERENCES ruta (idRuta));";
+        private String tablaPunto = "CREATE TABLE punto (idPunto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, latitud REAL, longitud REAL,timestamp text,idRuta INTEGER, FOREIGN KEY (idRuta) REFERENCES ruta (idRuta));";
 
         //Constructor
         public BDHelper(Context context, String name, CursorFactory factory, int version) {
@@ -142,11 +142,12 @@ public class GestorBD {
     public int mostrarIdRuta(){
       int idRuta = 0;
       if(bd.isReadOnly()){
-            final String devolverRuta = "SELECT last_insert_rowid();";
-            Cursor cursorRuta = bd.rawQuery(devolverRuta, null);
+
+            Cursor cursorRuta = bd.rawQuery("SELECT last_insert_rowid();", null);
             cursorRuta.moveToFirst();
             idRuta = cursorRuta.getInt(0);
             cursorRuta.close();
+
       }//   end if
         return idRuta;
 
@@ -161,7 +162,7 @@ public class GestorBD {
         if(bd.isOpen()){
 
             String tabla = "ruta";
-            String [] columnas = new String [] {"id_ruta","timestamp"};
+            String [] columnas = new String [] {"idRuta","timestamp"};
             String where = null;
             String [] argumentos = null;
             String groupby = null;
@@ -198,7 +199,7 @@ public class GestorBD {
             dato.put("latitud",coordenada.getLatitud());
             dato.put("longitud",coordenada.getLongitud());
             dato.put("timestamp",coordenada.getTimestap());
-            dato.put("id_ruta", coordenada.getId_ruta());
+            dato.put("idRuta", coordenada.getId_ruta());
 
             bd.insert("punto", null, dato);
 
@@ -252,6 +253,31 @@ public class GestorBD {
         return coordenada;
 
     }// end obtenerCoordenadas
+
+    // Debug
+
+    public int cantidadRuta(){
+
+        Cursor cRuta = bd.rawQuery("SELECT * FROM ruta",null);
+        return cRuta.getCount();
+
+    }// end cantidad ruta
+
+    public int cantidadCoordenadas(){
+
+        Cursor cCoordenadas = bd.rawQuery("SELECT * FROM punto",null);
+
+        return cCoordenadas.getCount();
+    }// end cantidad coordenadas
+/*
+    public int primeraRuta(){
+
+        Cursor cpRuta = bd.rawQuery("SELECT idRuta FROM ruta where idRuta = 0", null);
+
+        return Integer.parseInt(String.valueOf(cpRuta));
+
+    }// end primeraRuta
+*/
 
 
 

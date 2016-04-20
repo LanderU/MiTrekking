@@ -10,7 +10,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
@@ -25,9 +24,6 @@ public class Servicio extends Service {
     Coordenada corde = null;
     GestorBD baseDatos = new GestorBD(this);
 
-    // Location manager
-
-//    LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -41,10 +37,10 @@ public class Servicio extends Service {
             public void onLocationChanged(Location location) {
                 //constructor
                 corde = new Coordenada(0.0,0.0,"nada");
-           // seteamos la latitud y la longitud
+                // seteamos la latitud y la longitud
                 corde.setLatitud(location.getLatitude());
                 corde.setLatitud(location.getLongitude());
-            // fecha y hora
+                // fecha y hora
                 Calendar cal = new GregorianCalendar();
 
                 Date date = cal.getTime();
@@ -55,10 +51,15 @@ public class Servicio extends Service {
 
                 // Abrimos la BD
                 baseDatos.abrirBD();
-                // Llamamos al método que nos trae el último id_ruta insertado
-                corde.setId_ruta(baseDatos.obtenerRuta());
+                // Llamamos al método que nos trae el último id_ruta
+
+                corde.setId_ruta(baseDatos.mostrarIdRuta());
                 // Guardamos el dato
                 baseDatos.guardarCoordenadas(corde);
+                // Debug
+                //System.out.println("CantidadRutas "+baseDatos.cantidadRuta());
+                //System.out.println("Cantidad puntos " + baseDatos.cantidadCoordenadas());
+                //System.out.println("Id ruta última ruta " + baseDatos.mostrarIdRuta());
 
             }
             @Override
@@ -76,4 +77,27 @@ public class Servicio extends Service {
 
 
     }// end onCreate
+
+    @Override
+    public void onDestroy(){
+
+            // Cerramos la BD
+            baseDatos.cerrarBD();
+            // Destruimos el servicio
+            stopSelf();
+            super.onDestroy();
+
+
+        // Debug
+/*
+        Context context = getApplicationContext();
+        CharSequence mensaje = "Servicio destroy";
+        int duracion = Toast.LENGTH_LONG;
+
+        Toast toast = Toast.makeText(context,mensaje,duracion);
+        toast.show();
+*/
+
+
+    }// end onDestroy
 }// end class

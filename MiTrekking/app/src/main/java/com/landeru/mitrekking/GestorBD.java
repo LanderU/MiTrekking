@@ -109,8 +109,8 @@ public class GestorBD {
 
     } // end cerrarBD
 
-    // Guardar ruta
-
+    // Guardar ruta NOT FOUND
+/*
     public void guardarRuta(){
 
         if(bd.isOpen()){
@@ -135,6 +135,25 @@ public class GestorBD {
         } // end if
 
     } //end guardar Ruta
+
+*/
+
+    public void guardarRuta(){
+
+        if (bd.isOpen()) {
+
+            Calendar cal = new GregorianCalendar();
+
+            Date date = cal.getTime();
+
+            SimpleDateFormat fechaHora = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+            String tiempo = fechaHora.format(date);
+
+            bd.execSQL("insert into ruta values (null," + tiempo + ")");
+        }// end if
+
+    } //end gurardar Ruta
 
 
     // Devolver la ruta última

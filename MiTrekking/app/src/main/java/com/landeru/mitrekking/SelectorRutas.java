@@ -8,18 +8,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class SelectorRutas extends AppCompatActivity {
 
     private Button verMapa;
+    private TextView error;
+    GestorBD baseD = new GestorBD(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selector_rutas);
+/*
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-/*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,17 +33,32 @@ public class SelectorRutas extends AppCompatActivity {
         });
 */
         verMapa = (Button) findViewById(R.id.button3);
+        error=(TextView)findViewById(R.id.textView);
 
-        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener(){
+        verMapa.setVisibility(View.INVISIBLE);
 
-            @Override
-            public void onClick(View v){
+        baseD.abrirBD();
 
-                startActivity(new Intent(SelectorRutas.this, MapsActivity.class));
+        if (baseD.cantidadRuta() == 0){
 
-            }
+            error.setText("No hay ninguna ruta por el momento");
+        }else{
+            error.setVisibility(View.INVISIBLE);
+            verMapa.setVisibility(View.VISIBLE);
 
-        });
+            findViewById(R.id.button3).setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v){
+
+                    startActivity(new Intent(SelectorRutas.this, MapsActivity.class));
+
+                }
+
+            });
+
+        }
+
 
     }// end on create
 

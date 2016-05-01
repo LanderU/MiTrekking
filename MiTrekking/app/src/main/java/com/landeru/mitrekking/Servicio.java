@@ -11,7 +11,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.ContextCompat;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,9 +36,11 @@ public class Servicio extends Service {
             public void onLocationChanged(Location location) {
                 //constructor
                 corde = new Coordenada(0.0,0.0,"nada");
+
                 // seteamos la latitud y la longitud
                 corde.setLatitud(location.getLatitude());
                 corde.setLatitud(location.getLongitude());
+
                 // fecha y hora
                 Calendar cal = new GregorianCalendar();
 
@@ -51,17 +52,19 @@ public class Servicio extends Service {
 
                 // Abrimos la BD
                 baseDatos.abrirBD();
-                // Llamamos al método que nos trae el último id_ruta
 
+                // Llamamos al método que nos trae el último id_ruta
                 corde.setId_ruta(baseDatos.mostrarIdRuta());
                 // Guardamos el dato
                 baseDatos.guardarCoordenadas(corde);
-                // Debug
-                //System.out.println("CantidadRutas "+baseDatos.cantidadRuta());
-                //System.out.println("Cantidad puntos " + baseDatos.cantidadCoordenadas());
-                //System.out.println("Id ruta última ruta " + baseDatos.mostrarIdRuta());
+/* Debug
+                System.out.println("CantidadRutas: "+baseDatos.cantidadRuta());
+                System.out.println("Cantidad puntos: " + baseDatos.cantidadCoordenadas());
+                System.out.println("Id ruta última ruta: " + baseDatos.mostrarIdRuta());
+                System.out.println("Id último punto insertado: "+ baseDatos.mostrarIdCoordenadas(baseDatos.mostrarIdRuta()));
+*/
 
-            }
+            }//end location
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {}
             public void onProviderEnabled(String provider) {}

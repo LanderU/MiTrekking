@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.CursorAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,8 +31,17 @@ public class GestorBD {
 
     private class BDHelper extends SQLiteOpenHelper{
 
-        private String tablaRuta = "CREATE TABLE ruta (idRuta INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, timestamp text);";
-        private String tablaPunto = "CREATE TABLE punto (idPunto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, latitud REAL, longitud REAL,timestamp text,idRuta INTEGER, FOREIGN KEY (idRuta) REFERENCES ruta (idRuta));";
+        private String tablaRuta = "CREATE TABLE IF NOT EXISTS ruta (" +
+                                                                       "idRuta INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                                                       "timestamp text" +
+                                                                     ");";
+        private String tablaPunto = "CREATE TABLE IF NOT EXISTS punto (" +
+                                                                        "idPunto INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                                                                       "latitud REAL, " +
+                                                                        "longitud REAL,timestamp text," +
+                                                                        "idRuta INTEGER, " +
+                                                                        "FOREIGN KEY (idRuta) REFERENCES ruta (idRuta)" +
+                                                                       ");";
 
         //Constructor
         public BDHelper(Context context, String name, CursorFactory factory, int version) {
@@ -48,6 +58,7 @@ public class GestorBD {
                 db.execSQL("PRAGMA foreign_keys=ON;");
                 // Creamos la tabla Ruta
                 db.execSQL(tablaRuta);
+                db.execSQL("PRAGMA foreign_keys=ON;");
                 // Creamos la tabla Punto
                 db.execSQL(tablaPunto);
 
@@ -109,35 +120,6 @@ public class GestorBD {
 
     } // end cerrarBD
 
-    // Guardar ruta NOT FOUND
-/*
-    public void guardarRuta(){
-
-        if(bd.isOpen()){
-
-            ContentValues nuevaRuta = new ContentValues();
-
-            Calendar cal = new GregorianCalendar();
-
-            Date date = cal.getTime();
-
-            SimpleDateFormat fechaHora = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-            String tiempo = fechaHora.format(date);
-
-            nuevaRuta.put("timestamp", tiempo);
-
-            // Hacemos el insert en la BD
-
-            bd.insert("ruta", null, nuevaRuta);
-
-
-        } // end if
-
-    } //end guardar Ruta
-
-*/
-
     public void guardarRuta(){
 
         if (bd.isOpen()) {
@@ -150,7 +132,10 @@ public class GestorBD {
 
             String tiempo = fechaHora.format(date);
 
-            bd.execSQL("insert into ruta values (null," + tiempo + ")");
+            String sql = "INSERT INTO ruta (timestamp) VALUES ('"+tiempo+"')";
+
+            bd.execSQL(sql);
+
         }// end if
 
     } //end gurardar Ruta
@@ -159,16 +144,18 @@ public class GestorBD {
     // Devolver la ruta última
 
     public int mostrarIdRuta(){
-      int idRuta = 0;
-      if(bd.isReadOnly()){
+      int ultimaRuta = Integer.MAX_VALUE;
 
-            Cursor cursorRuta = bd.rawQuery("SELECT last_insert_rowid();", null);
+      if(bd.isOpen()){
+
+            Cursor cursorRuta = bd.rawQuery("SELECT idRuta from ruta ORDER BY idRuta DESC", null);
             cursorRuta.moveToFirst();
-            idRuta = cursorRuta.getInt(0);
+            ultimaRuta = cursorRuta.getInt(0);
             cursorRuta.close();
 
-      }//   end if
-        return idRuta;
+      }//end if
+
+        return ultimaRuta;
 
     }// end obtener ruta
 
@@ -213,15 +200,9 @@ public class GestorBD {
 
         if(bd.isOpen() && coordenada != null){
 
-            ContentValues dato = new ContentValues();
+            String sql = "INSERT INTO punto (latitud,longitud,timestamp,idRuta) values ("+coordenada.getLatitud()+","+coordenada.getLongitud()+",'"+coordenada.getTimestap()+"',"+coordenada.getId_ruta()+");";
 
-            dato.put("latitud",coordenada.getLatitud());
-            dato.put("longitud",coordenada.getLongitud());
-            dato.put("timestamp",coordenada.getTimestap());
-            dato.put("idRuta", coordenada.getId_ruta());
-
-            bd.insert("punto", null, dato);
-
+            bd.execSQL(sql);
 
         }// end if
 
@@ -288,21 +269,23 @@ public class GestorBD {
 
         return cCoordenadas.getCount();
     }// end cantidad coordenadas
-/*
-    public int primeraRuta(){
 
-        Cursor cpRuta = bd.rawQuery("SELECT idRuta FROM ruta where idRuta = 0", null);
+    public int mostrarIdCoordenadas(int idRuta){
 
-        return Integer.parseInt(String.valueOf(cpRuta));
+        int idCoordenada = Integer.MAX_VALUE;
 
-    }// end primeraRuta
-*/
+        if(bd.isOpen()){
+
+            Cursor cursorRuta = bd.rawQuery("SELECT idPunto from punto where idRuta = "+idRuta+" ORDER BY idPunto DESC", null);
+            cursorRuta.moveToFirst();
+            idCoordenada = cursorRuta.getInt(0);
+            cursorRuta.close();
+
+        }//end if
 
 
-
-
-
-
+        return idCoordenada;
+    }// end mostrarIdCoordenadas
 
 
 }//end class

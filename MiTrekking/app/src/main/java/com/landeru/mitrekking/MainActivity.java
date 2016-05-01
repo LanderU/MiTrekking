@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 stopService(new Intent(MainActivity.this,Servicio.class));
+                bt1.setEnabled(true);
                 startActivity(new Intent(MainActivity.this, SelectorRutas.class));
             }
         });

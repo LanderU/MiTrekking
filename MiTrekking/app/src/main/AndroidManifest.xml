@@ -39,7 +39,17 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
+
+        <service
+            android:name=".Servicio"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".SelectorRutas"
+            android:label="@string/title_activity_selector_rutas"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

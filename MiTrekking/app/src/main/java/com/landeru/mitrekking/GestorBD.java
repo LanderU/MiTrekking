@@ -166,7 +166,7 @@ public class GestorBD {
         List<Ruta> rt = new ArrayList<>();
 
         if(bd.isOpen()){
-
+/*
             String tabla = "ruta";
             String [] columnas = new String [] {"idRuta","timestamp"};
             String where = null;
@@ -175,16 +175,19 @@ public class GestorBD {
             String having = null;
             String orderby = null;
             String limit = null;
+*/
+            //Cursor cursorRuta = bd.query(tabla,columnas,where,argumentos,groupby,having,orderby,limit);
 
-            Cursor cursorRuta = bd.query(tabla,columnas,where,argumentos,groupby,having,orderby,limit);
+            Cursor cursorRuta = bd.rawQuery("SELECT * FROM ruta;",null);
 
             if (cursorRuta.moveToFirst()){
                 do {
                     Ruta r = new Ruta (Integer.parseInt(cursorRuta.getString(0)),cursorRuta.getString(1));
+                    rt.add(r);
 
                 } while(cursorRuta.moveToNext());
 
-            }// end ifi
+            }// end if
 
 
         }// end if
